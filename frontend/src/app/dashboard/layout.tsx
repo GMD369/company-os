@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { Sidebar } from "@/components/dashboard/Sidebar";
 import { SignOutButton } from "./SignOutButton";
 
 export default async function DashboardLayout({
@@ -13,21 +13,20 @@ export default async function DashboardLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen">
-      <header className="flex items-center justify-between border-b px-6 py-4">
-        <nav className="flex gap-4 text-sm">
-          <Link href="/dashboard" className="font-semibold">
-            AI OS
-          </Link>
-          <Link href="/dashboard/documents">Documents</Link>
-          <Link href="/dashboard/chat">Chat</Link>
-        </nav>
-        <div className="flex items-center gap-3 text-sm">
-          <span>{user?.email}</span>
+    <div className="flex min-h-screen bg-slate-50">
+      <Sidebar />
+      <div className="flex flex-1 flex-col">
+        <header className="flex items-center justify-end gap-3 border-b border-slate-200/70 bg-white/80 px-8 py-4 backdrop-blur">
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-brand-light to-brand text-xs font-medium text-white shadow-sm">
+              {user?.email?.[0]?.toUpperCase()}
+            </span>
+            {user?.email}
+          </div>
           <SignOutButton />
-        </div>
-      </header>
-      <main className="p-6">{children}</main>
+        </header>
+        <main className="flex-1 p-8">{children}</main>
+      </div>
     </div>
   );
 }
